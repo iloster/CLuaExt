@@ -11,20 +11,8 @@
 #include "lauxlib.h"
 #include "lualib.h"
 #include "cJSON.h"
+#include "global_parse.h"
 
-
-
-static const char * load_config = "\
-local config_name = ...\
-local f = assert(io.open(config_name))\
-local code = assert(f:read \'*a\')\
-local function getenv(name) return assert(os.getenv(name), \'os.getenv() failed: \' .. name) end\
-code = string.gsub(code, \'%$([%w_%d]+)\', getenv)\
-f:close()\
-local result = {}\
-assert(load(code,\'=(load)\',\'t\',result))()\
-return result\
-";
 
 void printTable(lua_State* L,cJSON* root){
     int it = lua_gettop(L);
@@ -69,7 +57,7 @@ void init(){
 
 }
 
-void skynet_init(){
+void init1(){
 
     lua_State *L = luaL_newstate();  /* opens Lua */
     luaL_openlibs(L);   /* opens the standard libraries */
@@ -99,7 +87,9 @@ void skynet_init(){
 int main(int argc, const char * argv[]) {
     // insert code here...
     printf("Hello, World!\n");
-    init();
-//    skynet_init();
+//    init();
+//    init1();
+    const char* path ="/Users/dev/Documents/document/MyProject/CLua/CLua/config.lua";
+    lua_global_parse(path);
     return 0;
 }
