@@ -26,10 +26,8 @@ void lua_global_loop(lua_State* L,cJSON* root){
         const char * value = "unknow";
         if(lua_iskeyword(key)!=1){
             if(lua_istable(L, -1)){
-//                value = "table";
                 cJSON* node = cJSON_CreateObject();
                 cJSON_AddItemToObject(root,key,node);
-
                 lua_global_loop(L,node);
             }else {
                 if(lua_isuserdata(L, -1)){
@@ -51,7 +49,6 @@ void lua_global_loop(lua_State* L,cJSON* root){
                     cJSON_AddItemToObject(root,key,cJSON_CreateString(value));
                 }
 
-                printf("%s => %s\n",key ,value);
             }
         }
         lua_pop(L,1);
@@ -59,23 +56,33 @@ void lua_global_loop(lua_State* L,cJSON* root){
     }
 }
 
-void lua_global_parse(const char* path){
+char* lua_global_parse(const char* path){
     cJSON* root = cJSON_CreateObject();
     lua_State *L = luaL_newstate();  /* opens Lua */
     luaL_openlibs(L);   /* opens the standard libraries */
     //    "/Users/dev/Documents/document/MyProject/CLua/CLua/config.lua"
-    luaL_loadfile(L,path); /* runs Lua script */
-    lua_pcall(L,0,0,0);
+    int error = luaL_loadfile(L,path); /* runs Lua script */
+    if(error!=0){
+        perror("语法错误");
+        exit(0);
+    }
+    int error1 = lua_pcall(L,0,0,0);
+    if(error1 != 0){
+        perror("语法错误");
+        exit(0);
+    }
     int it = lua_gettop(L);
     printf("lua stack size:%d\n",it);
     lua_getglobal(L, "_G");
     if(lua_istable(L, -1)){
         printf("table\n");
-        lua_gettable(L, -1);
+//        lua_gettable(L, -1);
         lua_global_loop(L,root);
     }
+    lua_close(L);
     char *ret=cJSON_Print(root);
     printf("ret = %s\n",ret);
+    return cJSON_Print(root);
 }
 
 
