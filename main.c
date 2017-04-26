@@ -21,6 +21,6 @@ int main(int argc, const char * argv[]) {
 //    const char* path="/Users/cheng/Documents/CLuaExt/test/test.lua";
 //    printf("%s",lua_global_parse(path));
     const char* path="/Users/cheng/Documents/CLuaExt/test/test1.lua";
-    printf("%s",lua_local_parse(path));
+    printf("%s\n",lua_local_parse(path));
     return 0;
 }

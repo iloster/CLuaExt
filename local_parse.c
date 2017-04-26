@@ -65,7 +65,7 @@ char* lua_local_parse(const char* path){
     }
     lua_local_loop(L,root);
     char *ret=cJSON_Print(root);
-    printf("ret = %s\n",ret);
+//    printf("ret = %s\n",ret);
     lua_close(L);
     return ret;
 }
