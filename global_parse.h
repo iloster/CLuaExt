@@ -12,7 +12,7 @@
 void lua_global_loop(lua_State* L);
 void lua_global_parse(const char* path);
 //过滤_G中关键字
-void lua_global_filter();
+void lua_iskeyword();
 
 
 #endif /* global_parse_h */
