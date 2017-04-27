@@ -13,7 +13,7 @@
 #include "cJSON.h"
 
 
-void lua_local_loop(lua_State* L,cJSON* root){
+void light_local_loop(lua_State* L,cJSON* root){
     int it = lua_gettop(L);
     lua_pushnil(L);
     while (lua_next(L, it) ){
@@ -22,7 +22,7 @@ void lua_local_loop(lua_State* L,cJSON* root){
         if(lua_istable(L, -1)){
             cJSON* node = cJSON_CreateObject();
             cJSON_AddItemToObject(root,key,node);
-            lua_local_loop(L,node);
+            light_local_loop(L,node);
         }else{
             if(lua_isuserdata(L, -1)){
                 value = "userdata";
@@ -51,7 +51,7 @@ void lua_local_loop(lua_State* L,cJSON* root){
 /**
  *解析本地变量
  */
-char* lua_local_parse(const char* path){
+char* light_local_parse(const char* path){
     cJSON* root = cJSON_CreateObject();
     lua_State *L = luaL_newstate();  /* opens Lua */
     luaL_openlibs(L);   /* opens the standard libraries */
@@ -63,7 +63,7 @@ char* lua_local_parse(const char* path){
     if(lua_istable(L, -2)){
         lua_gettable(L, -2);
     }
-    lua_local_loop(L,root);
+    light_local_loop(L,root);
     char *ret=cJSON_Print(root);
 //    printf("ret = %s\n",ret);
     lua_close(L);

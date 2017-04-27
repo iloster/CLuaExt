@@ -18,7 +18,7 @@ const char* KeyWord[] = {"io","select","rawequal","ipairs","os","utf8","require"
                         "collectgarbage","tonumber","pairs","pcall","assert","select","rawset","load","string","setmetatable",
                         "next","_G","getmetatable","print","coroutine"};
 
-void lua_global_loop(lua_State* L,cJSON* root){
+void light_global_loop(lua_State* L,cJSON* root){
     lua_pushnil(L);
     while (lua_next(L,-2))
     {
@@ -28,7 +28,7 @@ void lua_global_loop(lua_State* L,cJSON* root){
             if(lua_istable(L, -1)){
                 cJSON* node = cJSON_CreateObject();
                 cJSON_AddItemToObject(root,key,node);
-                lua_global_loop(L,node);
+                light_global_loop(L,node);
             }else {
                 if(lua_isuserdata(L, -1)){
                     value = "userdata";
@@ -56,7 +56,7 @@ void lua_global_loop(lua_State* L,cJSON* root){
     }
 }
 
-char* lua_global_parse(const char* path){
+char* light_global_parse(const char* path){
     cJSON* root = cJSON_CreateObject();
     lua_State *L = luaL_newstate();  /* opens Lua */
     luaL_openlibs(L);   /* opens the standard libraries */
@@ -75,9 +75,8 @@ char* lua_global_parse(const char* path){
     printf("lua stack size:%d\n",it);
     lua_getglobal(L, "_G");
     if(lua_istable(L, -1)){
-        printf("table\n");
 //        lua_gettable(L, -1);
-        lua_global_loop(L,root);
+        light_global_loop(L,root);
     }
     lua_close(L);
     char *ret=cJSON_Print(root);
