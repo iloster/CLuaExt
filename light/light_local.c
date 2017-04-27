@@ -12,7 +12,6 @@
 #include "lualib.h"
 #include "cJSON.h"
 
-
 void light_local_loop(lua_State* L,cJSON* root){
     int it = lua_gettop(L);
     lua_pushnil(L);
