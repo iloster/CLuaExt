@@ -56,7 +56,8 @@ char* light_local_parse(const char* path){
     int error = luaL_dofile(L,path); /* runs Lua script */
     if(error!=0){
         perror("语法错误");
-        exit(0);
+//        exit(0);
+        return NULL;
     }
     if(lua_istable(L, -2)){
         lua_gettable(L, -2);
@@ -65,6 +66,7 @@ char* light_local_parse(const char* path){
     char *ret=cJSON_Print(root);
 //    printf("ret = %s\n",ret);
     lua_close(L);
+    cJSON_Delete(root);
     return ret;
 }
 

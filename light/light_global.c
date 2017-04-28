@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include <string.h>
 #include "lua.h"
 #include "lauxlib.h"
 #include "lualib.h"
@@ -63,15 +64,15 @@ char* light_global_parse(const char* path){
     int error = luaL_loadfile(L,path); /* runs Lua script */
     if(error!=0){
         perror("语法错误");
-        exit(0);
+        return NULL;
     }
     int error1 = lua_pcall(L,0,0,0);
     if(error1 != 0){
         perror("语法错误");
-        exit(0);
+        return NULL;
     }
     int it = lua_gettop(L);
-    printf("lua stack size:%d\n",it);
+//    printf("lua stack size:%d\n",it);
     lua_getglobal(L, "_G");
     if(lua_istable(L, -1)){
 //        lua_gettable(L, -1);
@@ -79,8 +80,9 @@ char* light_global_parse(const char* path){
     }
     lua_close(L);
     char *ret=cJSON_Print(root);
-    printf("ret = %s\n",ret);
-    return cJSON_Print(root);
+//    printf("ret = %s\n",ret);
+    cJSON_Delete(root);
+    return ret;
 }
 
 

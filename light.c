@@ -17,12 +17,15 @@
 #define MODE_LOCAL 2
 #define LIGHT_VERSION "light v1.0.0"
 
+int main(int argc, const char * argv[]) {
+    return 0;
+}
 /**
  *@path lua文件的路径
  *@mode 是全局的是局部变量的方式
  *@return 将table转换成json
  */
-char* get(const char* path,int mode){
+char* getLight(const char* path,int mode){
     if(MODE_GOBAL == mode){
 //     全局变量的方式
         return light_global_parse(path);
