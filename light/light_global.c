@@ -8,7 +8,6 @@
 
 #include <stdio.h>
 #include "lua.h"
-#include "lua.h"
 #include "lauxlib.h"
 #include "lualib.h"
 #include "cJSON.h"
